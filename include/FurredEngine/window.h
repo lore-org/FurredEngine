@@ -1,6 +1,7 @@
 #pragma once
 
-#include "gl.h"
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
 #include "exports.h"
 
 typedef struct FE_Window FE_Window;
