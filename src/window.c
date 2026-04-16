@@ -1,9 +1,18 @@
-#include "GLFW/glfw3.h"
 #include <FurredEngine/window.h>
 #include <stdlib.h>
+#include <string.h>
 
+FE_Window* furred_create_window(FE_WindowSettings* settings) {
+    FE_WindowSettings* windowSettings = &(FE_WindowSettings){
+        640, 480,
+        "GLFW Window"
+    };
+    if (settings) {
+        if (settings->width > 0) windowSettings->width = settings->width;
+        if (settings->height > 0) windowSettings->height = settings->height;
+        if (settings->title && strlen(settings->title) > 0) windowSettings->title = settings->title;
+    }
 
-FE_Window* furred_create_window() {
     FE_Window* window = malloc(sizeof(FE_Window));
     if (!window) return NULL;
 
@@ -16,8 +25,10 @@ FE_Window* furred_create_window() {
     // Allow debugging of OpenGL
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
-    // TODO: Allow customisable window params
-    window->glfw_window = glfwCreateWindow(640, 360, "", NULL, NULL);
+    window->glfw_window = glfwCreateWindow(
+        windowSettings->width, windowSettings->height,
+        windowSettings->title,
+        NULL, NULL);
     if (!window->glfw_window) return NULL;
 
     // Switch OpenGL context to the current one
