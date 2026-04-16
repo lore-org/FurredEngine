@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../build/furredengine_export.h"
+#include <furredengine_export.h>
 #if __cplusplus
     #define FE_EXPORT extern "C" FURREDENGINE_EXPORT
 #else

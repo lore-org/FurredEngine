@@ -25,8 +25,9 @@ generate_export_header(FurredEngine)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-target_include_directories(FurredEngine
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+target_include_directories(FurredEngine PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 # Configure submodules
