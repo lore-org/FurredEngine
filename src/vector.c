@@ -65,15 +65,28 @@ void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
     // Check if space actually needs to be reserved
     if (newCapacity <= vector->capacity) return;
 
-    const FE_size_t capacityBytes = newCapacity * vector->dataSize;
-
     // Allocate new array
-    void** newData = realloc(vector->data, capacityBytes);
+    void** newData = realloc(vector->data, newCapacity * vector->dataSize);
     assert(newData && "Vector could not be expanded. Does the system have enough memory?");
     
     // Update vector object
     vector->data = newData;
     vector->capacity = newCapacity;
+}
+
+void furred_vector_shrink_to_fit(FE_Vector* vector) {
+    _FE_VECTOR_EXISTS_ASSERT(vector);
+
+    // Check if vector is already shrunken
+    if (vector->size == vector->capacity) return;
+
+    // Allocate new array
+    void** newData = realloc(vector->data, vector->size * vector->dataSize);
+    assert(newData && "Vector could not be shrunken. Does the system have enough memory?");
+    
+    // Update vector object
+    vector->data = newData;
+    vector->capacity = vector->size;
 }
 
 
@@ -118,4 +131,12 @@ void furred_vector_resize(FE_Vector* vector, FE_size_t newSize) {
     // Else, vector does not need to be reallocated
 
     vector->size = newSize;
+}
+
+void furred_vector_swap(FE_Vector* vector, FE_Vector* otherVector) {
+    void* firstVector = vector;
+    void* secondVector = otherVector;
+
+    vector = secondVector;
+    otherVector = firstVector;
 }
