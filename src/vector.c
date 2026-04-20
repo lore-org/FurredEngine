@@ -2,7 +2,6 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
 #define _FE_VECTOR_EXISTS_ASSERT(v) \
     assert(v && "Vector does not exist."); \
@@ -100,6 +99,7 @@ void furred_vector_resize(FE_Vector* vector, FE_size_t newSize) {
     if (newSize > vector->capacity) {
         // Increase the current capacity to the power of 2 following newSize
         // This is done to ensure that the larger a vector grows the less allocations it should need
+        //
         // furred_vector_reserve incurs an extra unneeded check, but code brevity is more important here
         furred_vector_reserve(vector, next_pow2(newSize));
     }
