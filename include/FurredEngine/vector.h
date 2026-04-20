@@ -29,4 +29,3 @@ FE_EXPORT void furred_vector_erase(FE_Vector* vector, FE_size_t index); // TODO 
 FE_EXPORT void furred_vector_push_back(FE_Vector* vector, void* data);
 FE_EXPORT void furred_vector_pop_back(FE_Vector* vector);
 FE_EXPORT void furred_vector_resize(FE_Vector* vector, FE_size_t newSize);
-FE_EXPORT void furred_vector_swap(FE_Vector** vector, FE_Vector** otherVector);

@@ -132,11 +132,3 @@ void furred_vector_resize(FE_Vector* vector, FE_size_t newSize) {
 
     vector->size = newSize;
 }
-
-void furred_vector_swap(FE_Vector** vector, FE_Vector** otherVector) {
-    void* firstVector = *vector;
-    void* secondVector = *otherVector;
-
-    *vector = secondVector;
-    *otherVector = firstVector;
-}
