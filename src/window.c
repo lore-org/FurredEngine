@@ -1,4 +1,5 @@
 #include <FurredEngine/window.h>
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -14,10 +15,9 @@ FE_Window* furred_create_window(FE_WindowSettings* settings) {
     }
 
     FE_Window* window = malloc(sizeof(FE_Window));
-    if (!window) return NULL;
-
+    assert(window && "Could not create window. Does the system have enough memory?");
     // Initialise GLFW
-    if (!glfwInit()) return NULL;
+    assert(glfwInit() && "Could not initialise GLFW.");
 
     // Set requested OpenGL Context to 3.2
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -29,12 +29,12 @@ FE_Window* furred_create_window(FE_WindowSettings* settings) {
         windowSettings->width, windowSettings->height,
         windowSettings->title,
         NULL, NULL);
-    if (!window->glfw_window) return NULL;
+    assert(window->glfw_window && "Could not create GLFW window.");
 
     // Switch OpenGL context to the current one
     glfwMakeContextCurrent(window->glfw_window);
     // Load OpenGL Addresses
-    if (!gladLoadGL(glfwGetProcAddress)) return NULL;
+    assert(gladLoadGL(glfwGetProcAddress) && "Could not load OpenGL.");
     // Enable VSync
     glfwSwapInterval(1);
 
