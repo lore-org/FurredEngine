@@ -23,8 +23,7 @@ FE_EXPORT void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity);
 FE_EXPORT void furred_vector_shrink_to_fit(FE_Vector* vector);
 
 FE_EXPORT void furred_vector_clear(FE_Vector* vector);
-FE_EXPORT void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data); // TODO - impl
-FE_EXPORT void furred_vector_emplace(FE_Vector* vector, FE_size_t index, void* data); // TODO - impl
+FE_EXPORT void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data);
 FE_EXPORT void furred_vector_erase(FE_Vector* vector, FE_size_t index); // TODO - impl
 FE_EXPORT void furred_vector_push_back(FE_Vector* vector, void* data);
 FE_EXPORT void furred_vector_pop_back(FE_Vector* vector);

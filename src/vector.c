@@ -89,6 +89,36 @@ void furred_vector_shrink_to_fit(FE_Vector* vector) {
     vector->capacity = vector->size;
 }
 
+// TODO - needs to be tested to ensure this functions properly
+void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data) {
+    _FE_VECTOR_EXISTS_ASSERT(vector);
+    assert(index < vector->size && "Vector index is out of range.");
+
+    // If index is at back of vector
+    if (index == vector->size - 1) {
+        // Push data to back and return early
+        furred_vector_push_back(vector, data);
+        return;
+    }
+
+    const FE_size_t oldSize = vector->size;
+
+    // Expand vector by 1
+    furred_vector_resize(vector, vector->size + 1);
+
+    // Pointer to index in vector data
+    void** dataPtr = vector->data + (index * vector->dataSize);
+    // Length from start of index to end of vector
+    const FE_size_t dataLength = oldSize - (index - 1);
+
+    // Move data after index forward by 1
+    memmove(
+        vector->data, dataPtr + vector->dataSize,
+        dataLength * vector->dataSize
+    );
+    // Assign index to data
+    *dataPtr = data;
+}
 
 void furred_vector_clear(FE_Vector* vector) {
     _FE_VECTOR_EXISTS_ASSERT(vector);
