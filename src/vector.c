@@ -48,11 +48,15 @@ void* furred_vector_front(FE_Vector* vector) {
 }
 
 void* furred_vector_back(FE_Vector* vector) {
+    _FE_VECTOR_EXISTS_ASSERT(vector);
+
     return furred_vector_at(vector, vector->size - 1);
 }
 
 
 void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
+    _FE_VECTOR_EXISTS_ASSERT(vector);
+    
     // Check if space actually needs to be reserved
     if (newCapacity <= vector->capacity) return;
 
@@ -69,11 +73,15 @@ void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
 
 
 void furred_vector_clear(FE_Vector* vector) {
+    _FE_VECTOR_EXISTS_ASSERT(vector);
+
     // Avoid using furred_vector_resize to prevent wasted computations
     vector->size = 0;
 }
 
 void furred_vector_push_back(FE_Vector* vector, void* data) {
+    _FE_VECTOR_EXISTS_ASSERT(vector);
+
     const FE_size_t oldSize = vector->size;
     furred_vector_resize(vector, vector->size + 1);
     // Retreive index to last item
@@ -84,6 +92,7 @@ void furred_vector_push_back(FE_Vector* vector, void* data) {
 }
 
 void furred_vector_pop_back(FE_Vector* vector) {
+    _FE_VECTOR_EXISTS_ASSERT(vector);
     assert(vector->size != 0 && "Vector has no elements to pop.");
 
     // Avoid using furred_vector_resize to prevent wasted computations
