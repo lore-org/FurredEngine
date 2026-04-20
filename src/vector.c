@@ -7,7 +7,7 @@
     assert(v && "Vector does not exist."); \
     assert(v->data && "Vector has already been destroyed.")
 
-unsigned int next_pow2(unsigned int x) {
+unsigned int _next_pow2(unsigned int x) {
     if (x < 2) return 2;
     return ((unsigned int)1 << 31) >> (__builtin_clz(x) - 1);
 }
@@ -113,7 +113,7 @@ void furred_vector_resize(FE_Vector* vector, FE_size_t newSize) {
         // This is done to ensure that the larger a vector grows the less allocations it should need
         //
         // furred_vector_reserve incurs an extra unneeded check, but code brevity is more important in this situation
-        furred_vector_reserve(vector, next_pow2(newSize));
+        furred_vector_reserve(vector, _next_pow2(newSize));
     }
     // Else, vector does not need to be reallocated
 
