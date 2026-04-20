@@ -41,7 +41,10 @@ void* furred_vector_at(FE_Vector* vector, FE_size_t index) {
 }
 
 void* furred_vector_front(FE_Vector* vector) {
-    return furred_vector_at(vector, 0);
+    _FE_VECTOR_EXISTS_ASSERT(vector);
+    assert(vector->size > 0 && "Vector index is out of range.");
+
+    return *vector->data;
 }
 
 void* furred_vector_back(FE_Vector* vector) {
