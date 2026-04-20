@@ -6,5 +6,3 @@
 #else
     #define FE_EXPORT FURREDENGINE_EXPORT
 #endif /* __cplusplus */
-
-#define FE_STRUCT(x) typedef struct x x; struct x
