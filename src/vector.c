@@ -42,6 +42,7 @@ void* furred_vector_at(FE_Vector* vector, FE_size_t index) {
     _FE_VECTOR_EXISTS_ASSERT(vector);
     assert(index < vector->size && "Vector index is out of range.");
 
+    // Return data at index
     return *(vector->data + (index * vector->dataSize));
 }
 
@@ -49,12 +50,14 @@ void* furred_vector_front(FE_Vector* vector) {
     _FE_VECTOR_EXISTS_ASSERT(vector);
     assert(vector->size > 0 && "Vector index is out of range.");
 
+    // Return beginning of data
     return *vector->data;
 }
 
 void* furred_vector_back(FE_Vector* vector) {
     _FE_VECTOR_EXISTS_ASSERT(vector);
 
+    // Return last element of data
     return furred_vector_at(vector, vector->size - 1);
 }
 
@@ -77,7 +80,7 @@ void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
 void furred_vector_shrink_to_fit(FE_Vector* vector) {
     _FE_VECTOR_EXISTS_ASSERT(vector);
 
-    // Check if vector is already shrunken
+    // Check if vector already fits its capacity
     if (vector->size == vector->capacity) return;
 
     // Allocate new array
@@ -131,10 +134,15 @@ void furred_vector_push_back(FE_Vector* vector, void* data) {
     _FE_VECTOR_EXISTS_ASSERT(vector);
 
     const FE_size_t oldSize = vector->size;
+    
+    // Expand vector by 1
     furred_vector_resize(vector, vector->size + 1);
-    // Retreive index to last item
+
+    // Pointer to last item in vector data
+    //
     // Avoid using furred_vector_back to prevent wasted computations
     void** dataPtr = vector->data + (oldSize * vector->dataSize);
+
     // Assign last item to data
     *dataPtr = data;
 }
