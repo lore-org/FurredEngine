@@ -68,10 +68,19 @@ void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
     // Check if space actually needs to be reserved
     if (newCapacity <= vector->capacity) return;
 
+    const FE_size_t oldCapacity = vector->capacity;
+
     // Allocate new array
     void** newData = realloc(vector->data, newCapacity * vector->data_size);
     assert(newData && "Vector could not be expanded. Does the system have enough memory?");
     
+    // Initialise newly allocated portion to 0
+    memset(
+        newData + (oldCapacity * vector->data_size),
+        NULL,
+        (newCapacity - oldCapacity) * vector->data_size
+    );
+
     // Update vector object
     vector->data = newData;
     vector->capacity = newCapacity;
