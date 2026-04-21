@@ -128,8 +128,8 @@ void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data) {
         vector->data, dataPtr + vector->data_size,
         dataLength * vector->data_size
     );
-    // Assign index to data
-    *dataPtr = data;
+    // Copy data to index
+    memcpy(dataPtr, data, vector->data_size);
 }
 
 void furred_vector_clear(FE_Vector* vector) {
@@ -147,13 +147,13 @@ void furred_vector_push_back(FE_Vector* vector, void* data) {
     // Expand vector by 1
     furred_vector_resize(vector, vector->size + 1);
 
-    // Pointer to last item in vector data
+    // Pointer to last element in vector data
     //
     // Avoid using furred_vector_back to prevent wasted computations
     void** dataPtr = vector->data + (oldSize * vector->data_size);
 
-    // Assign last item to data
-    *dataPtr = data;
+    // Copy data to last element
+    memcpy(dataPtr, data, vector->data_size);
 }
 
 void furred_vector_pop_back(FE_Vector* vector) {
