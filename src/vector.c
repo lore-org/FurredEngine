@@ -19,7 +19,7 @@ FE_Vector furred_vector_create(FE_size_t size, FE_size_t dataSize) {
 
     FE_Vector vector = {
         .size       = size,
-        .dataSize   = dataSize,
+        .data_size   = dataSize,
         .data       = data,
         .capacity   = size
     };
@@ -43,7 +43,7 @@ void* furred_vector_at(FE_Vector* vector, FE_size_t index) {
     assert(index < vector->size && "Vector index is out of range.");
 
     // Return data at index
-    return *(vector->data + (index * vector->dataSize));
+    return *(vector->data + (index * vector->data_size));
 }
 
 void* furred_vector_front(FE_Vector* vector) {
@@ -69,7 +69,7 @@ void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
     if (newCapacity <= vector->capacity) return;
 
     // Allocate new array
-    void** newData = realloc(vector->data, newCapacity * vector->dataSize);
+    void** newData = realloc(vector->data, newCapacity * vector->data_size);
     assert(newData && "Vector could not be expanded. Does the system have enough memory?");
     
     // Update vector object
@@ -84,7 +84,7 @@ void furred_vector_shrink_to_fit(FE_Vector* vector) {
     if (vector->size == vector->capacity) return;
 
     // Allocate new array
-    void** newData = realloc(vector->data, vector->size * vector->dataSize);
+    void** newData = realloc(vector->data, vector->size * vector->data_size);
     assert(newData && "Vector could not be shrunken. Does the system have enough memory?");
     
     // Update vector object
@@ -110,14 +110,14 @@ void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data) {
     furred_vector_resize(vector, vector->size + 1);
 
     // Pointer to index in vector data
-    void** dataPtr = vector->data + (index * vector->dataSize);
+    void** dataPtr = vector->data + (index * vector->data_size);
     // Length from start of index to end of vector
     const FE_size_t dataLength = oldSize - (index - 1);
 
     // Move data after index forward by 1
     memmove(
-        vector->data, dataPtr + vector->dataSize,
-        dataLength * vector->dataSize
+        vector->data, dataPtr + vector->data_size,
+        dataLength * vector->data_size
     );
     // Assign index to data
     *dataPtr = data;
@@ -141,7 +141,7 @@ void furred_vector_push_back(FE_Vector* vector, void* data) {
     // Pointer to last item in vector data
     //
     // Avoid using furred_vector_back to prevent wasted computations
-    void** dataPtr = vector->data + (oldSize * vector->dataSize);
+    void** dataPtr = vector->data + (oldSize * vector->data_size);
 
     // Assign last item to data
     *dataPtr = data;
