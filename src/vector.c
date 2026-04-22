@@ -41,7 +41,7 @@ unsigned int __furred_next_pow2(unsigned int x) {
 FE_Vector furred_vector_create(FE_size_t size, FE_size_t dataSize) {
     const FE_size_t capacity = size == 0 ? 1 : size;
 
-    void** data = calloc(capacity, dataSize);
+    void* data = calloc(capacity, dataSize);
     assert(data && "Vector could not be created. Does the system have enough memory?");
 
     FE_Vector vector = {
@@ -70,7 +70,7 @@ void* furred_vector_at(FE_Vector* vector, FE_size_t index) {
     assert(index < vector->size && "Vector index is out of range.");
 
     // Return data at index
-    return *(vector->data + (index * vector->data_size));
+    return vector->data + (index * vector->data_size);
 }
 
 void* furred_vector_front(FE_Vector* vector) {
@@ -78,7 +78,7 @@ void* furred_vector_front(FE_Vector* vector) {
     assert(vector->size > 0 && "Vector index is out of range.");
 
     // Return beginning of data
-    return *vector->data;
+    return vector->data;
 }
 
 void* furred_vector_back(FE_Vector* vector) {
@@ -98,7 +98,7 @@ void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
     const FE_size_t oldCapacity = vector->capacity;
 
     // Allocate new array
-    void** newData = realloc(vector->data, newCapacity * vector->data_size);
+    void* newData = realloc(vector->data, newCapacity * vector->data_size);
     assert(newData && "Vector could not be expanded. Does the system have enough memory?");
     
     // Initialise newly allocated portion to 0
@@ -120,7 +120,7 @@ void furred_vector_shrink_to_fit(FE_Vector* vector) {
     if (vector->size == vector->capacity) return;
 
     // Allocate new array
-    void** newData = realloc(vector->data, vector->size * vector->data_size);
+    void* newData = realloc(vector->data, vector->size * vector->data_size);
     assert(newData && "Vector could not be shrunken. Does the system have enough memory?");
     
     // Update vector object
@@ -146,7 +146,7 @@ void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data) {
     furred_vector_resize(vector, vector->size + 1);
 
     // Pointer to index in vector data
-    void** dataPtr = vector->data + (index * vector->data_size);
+    void* dataPtr = vector->data + (index * vector->data_size);
     // Length from start of index to end of vector
     const FE_size_t dataLength = oldSize - (index - 1);
 
@@ -180,7 +180,7 @@ void furred_vector_erase(FE_Vector* vector, FE_size_t index) {
     vector->size--;
 
     // Pointer to index in vector data
-    void** dataPtr = vector->data + (index * vector->data_size);
+    void* dataPtr = vector->data + (index * vector->data_size);
     // Length from start of next index to end of vector
     const FE_size_t dataLength = oldSize - index;
 
@@ -209,7 +209,7 @@ void furred_vector_push_back(FE_Vector* vector, void* data) {
     // Pointer to last element in vector data
     //
     // Avoid using furred_vector_back to prevent wasted computations
-    void** dataPtr = vector->data + (oldSize * vector->data_size);
+    void* dataPtr = vector->data + (oldSize * vector->data_size);
 
     // Copy data to last element
     memcpy(dataPtr, data, vector->data_size);

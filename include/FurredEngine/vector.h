@@ -23,7 +23,7 @@ typedef struct {
      * @brief Array of data of an unspecified type.
      * 
      */
-    void** data;
+    void* data;
     /**
      * @brief Number of elements currently able to fit into the array.
      * 
