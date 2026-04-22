@@ -9,3 +9,4 @@ macro (add_fe_test name)
 endmacro()
 
 add_fe_test(window)
+add_fe_test(vector)
