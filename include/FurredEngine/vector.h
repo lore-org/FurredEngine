@@ -30,6 +30,8 @@ typedef struct {
      */
     FE_size_t capacity;
 } FE_Vector;
+
+
 /**
  * @brief Constructs a vector of given `size` and `dataSize`.
  * 
@@ -108,7 +110,7 @@ FE_EXPORT void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* da
  * @param index The position of the element to be erased.
  * @return void
  */
-FE_EXPORT void furred_vector_erase(FE_Vector* vector, FE_size_t index); // TODO - impl
+FE_EXPORT void furred_vector_erase(FE_Vector* vector, FE_size_t index);
 /**
  * @brief Appends `data` to the end of `vector`.
  * 

@@ -152,11 +152,41 @@ void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data) {
 
     // Move data after index forward by 1
     memmove(
-        vector->data, dataPtr + vector->data_size,
+        dataPtr + vector->data_size, dataPtr,
         dataLength * vector->data_size
     );
     // Copy data to index
     memcpy(dataPtr, data, vector->data_size);
+}
+
+void furred_vector_erase(FE_Vector* vector, FE_size_t index) {
+    _FE_VECTOR_EXISTS_ASSERT(vector);
+    assert(index < vector->size && "Vector index is out of range.");
+
+    // If index is at back of vector
+    if (index == vector->size - 1) {
+        // Push data to back and return early
+        furred_vector_pop_back(vector);
+        return;
+    }
+
+    const FE_size_t oldSize = vector->size;
+
+    // Shrink vector by 1
+    //
+    // Avoid using furred_vector_resize to prevent wasted computations
+    vector->size--;
+
+    // Pointer to index in vector data
+    void** dataPtr = vector->data + (index * vector->data_size);
+    // Length from start of next index to end of vector
+    const FE_size_t dataLength = oldSize - index;
+
+    // Move data after index backward by 1
+    memmove(
+        dataPtr, dataPtr + vector->data_size,
+        dataLength * vector->data_size
+    );
 }
 
 void furred_vector_clear(FE_Vector* vector) {
