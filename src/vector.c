@@ -104,7 +104,7 @@ void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
     // Initialise newly allocated portion to 0
     memset(
         newData + (oldCapacity * vector->data_size),
-        NULL,
+        0,
         (newCapacity - oldCapacity) * vector->data_size
     );
 
