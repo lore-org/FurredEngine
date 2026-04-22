@@ -165,8 +165,10 @@ void furred_vector_erase(FE_Vector* vector, FE_size_t index) {
 
     // If index is at back of vector
     if (index == vector->size - 1) {
-        // Push data to back and return early
-        furred_vector_pop_back(vector);
+        // Pop data at back and return early
+        //
+        // Avoid using furred_vector_pop_back to prevent wasted computations
+        vector->size--;
         return;
     }
 
