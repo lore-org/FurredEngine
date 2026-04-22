@@ -7,9 +7,34 @@
     assert(v && "Vector does not exist."); \
     assert(v->data && "Vector has already been destroyed.")
 
-unsigned int _next_pow2(unsigned int x) {
+
+#if defined(__GNUC__) || defined(__clang__)
+    #define __furred_clz(x) (x == 0 ? 32 : __builtin_clz(x))
+#elif defined(_MSC_VER)
+    #include <intrin.h>
+    int __furred_clz(unsigned int x) {
+        if (x == 0) return 32;
+
+        unsigned int idx;
+        _BitScanReverse(&idx, x);
+        return 31 - idx;
+    }
+#else
+    int __furred_clz(unsigned int x) {
+        if (x == 0) return 32;
+
+        unsigned int cnt = 0;
+        for (int i = 31; i >= 0; i--) {
+            if ((x >> i) & 1) break;
+            cnt++;
+        }
+        return cnt;
+    }
+#endif
+
+unsigned int __furred_next_pow2(unsigned int x) {
     if (x < 2) return 2;
-    return ((unsigned int)1 << 31) >> (__builtin_clz(x) - 1);
+    return ((unsigned int)1 << 31) >> (__furred_clz(x) - 1);
 }
 
 
@@ -175,7 +200,7 @@ void furred_vector_resize(FE_Vector* vector, FE_size_t newSize) {
         // This is done to ensure that the larger a vector grows the less allocations it should need
         //
         // furred_vector_reserve incurs an extra unneeded check, but code brevity is more important in this situation
-        furred_vector_reserve(vector, _next_pow2(newSize));
+        furred_vector_reserve(vector, __furred_next_pow2(newSize));
     }
     // Else, vector does not need to be reallocated
 
