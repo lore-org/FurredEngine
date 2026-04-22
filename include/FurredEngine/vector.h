@@ -6,27 +6,27 @@ typedef unsigned int FE_size_t;
 
 /**
  * @brief An automatically resizing array.
- * 
+ * @warning This struct should not be modified outside of any `furred_vector_*` function.
  */
 typedef struct {
     /**
      * @brief Number of elements stored in the vector.
-     * 
+     * @warning This member should not be modified outside of any `furred_vector_*` function.
      */
     FE_size_t size;
     /**
      * @brief Size of each element in bytes.
-     * 
+     * @warning This member should not be modified outside of any `furred_vector_*` function.
      */
-    const FE_size_t data_size;
+    FE_size_t data_size;
     /**
      * @brief Array of data of an unspecified type.
-     * 
+     * @warning This member should not be modified outside of any `furred_vector_*` function.
      */
     void* data;
     /**
      * @brief Number of elements currently able to fit into the array.
-     * 
+     * @warning This member should not be modified outside of any `furred_vector_*` function.
      */
     FE_size_t capacity;
 } FE_Vector;
@@ -37,9 +37,9 @@ typedef struct {
  * 
  * @param size The number zeroed elements that will be inserted into the array.
  * @param dataSize The side of each element in bytes. Intended to use with `sizeof`.
- * @return FE_Vector 
+ * @return FE_Vector* 
  */
-FE_EXPORT FE_Vector furred_vector_create(FE_size_t size, FE_size_t dataSize);
+FE_EXPORT FE_Vector* furred_vector_create(FE_size_t size, FE_size_t dataSize);
 /**
  * @brief Destroys a previously constructed vector. See @ref furred_vector_create.
  * 

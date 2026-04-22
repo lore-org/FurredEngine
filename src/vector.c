@@ -38,15 +38,18 @@ unsigned int __furred_next_pow2(unsigned int x) {
 }
 
 
-FE_Vector furred_vector_create(FE_size_t size, FE_size_t dataSize) {
+FE_Vector* furred_vector_create(FE_size_t size, FE_size_t dataSize) {
     const FE_size_t capacity = size == 0 ? 1 : size;
 
     void* data = calloc(capacity, dataSize);
     assert(data && "Vector could not be created. Does the system have enough memory?");
 
-    FE_Vector vector = {
+    FE_Vector* vector = malloc(sizeof(FE_Vector));
+    assert(vector && "Vector could not be created. Does the system have enough memory?");
+    
+    *vector = (FE_Vector) {
         .size       = size,
-        .data_size   = dataSize,
+        .data_size  = dataSize,
         .data       = data,
         .capacity   = capacity
     };
