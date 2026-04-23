@@ -1,0 +1,102 @@
+name: Tests
+
+on:
+  workflow_dispatch:
+
+  push:
+    paths: |
+      - **/CMakeLists.txt
+      - **.c
+
+  pull_request:
+    paths: |
+      - **/CMakeLists.txt
+      - **.c
+
+jobs:
+  Build Tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - name: Windows
+          os: windows-2025
+          id: windows
+
+        - name: Linux
+          os: ubuntu-24.04
+          id: linux
+
+        - name: MacOS
+          os: macos-15
+          id: macos
+
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+
+    steps:
+      - name: Checkout ${{ github.repository }}
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          
+
+      - name: Set Up Build Cache
+        id: tests_buildcache
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+          key:
+            tests_buildcache-id_${{ matrix.config.id }}-cmakelists_${{ hashFiles('**/CMakeLists.txt') }}-cmake_${{ hashFiles('**/*.cmake') }}
+          restore-keys: |
+            tests_buildcache-id_${{ matrix.config.id }}-cmakelists_${{ hashFiles('**/CMakeLists.txt') }}-
+
+
+      - name: Set Up sccache
+        uses: mozilla-actions/sccache-action@v0.0.9
+        with:
+          disable_annotations: true
+          version: 'v0.13.0'
+        env:
+          SCCACHE_GHA_ENABLED: 'true'
+
+      - name: Set Up CMake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.2.3'
+
+      - name: Set Up Ninja
+        uses: ashutoshvarma/setup-ninja@v1.1
+        with:
+          version: '1.13.2'
+
+      - name: '[Windows/Linux/Android] - Set Up LLVM and Clang'
+        if: matrix.config.id != 'macos'
+        uses: KyleMayes/install-llvm-action@v2
+        with:
+          version: '21.1.8'
+          env: true
+
+  
+      - name: Run CMake Setup
+        if: steps.tests_buildcache.outputs.cache-hit == 'false'
+        shell: bash
+        run: >
+          cmake
+          -D CMAKE_BUILD_TYPE=RelWithDebInfo
+          -D BUILD_SHARED_LIBS=OFF
+          -D FE_BUILD_TESTS=ON
+          -B build
+          -G Ninja
+          --log-level DEBUG
+          --fresh
+      
+      - name: Run CMake Build
+        shell: bash
+        run: >
+          cmake
+          --build build
+          --target all
+          -j $(nproc)
+          -v
