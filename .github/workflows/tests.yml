@@ -81,7 +81,7 @@ jobs:
 
   
       - name: Run CMake Setup
-        if: steps.tests_buildcache.outputs.cache-hit == 'false'
+        if: steps.tests_buildcache.outputs.cache-hit != 'true'
         shell: bash
         run: >
           cmake
