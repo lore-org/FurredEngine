@@ -7,7 +7,6 @@ on:
       - **.c
       - **.h
       - .github/
-
   pull_request:
     paths: |
       - **/CMakeLists.txt
