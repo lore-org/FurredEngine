@@ -54,6 +54,16 @@ jobs:
             tests_buildcache-id_${{ matrix.config.id }}-cmakelists_${{ hashFiles('**/CMakeLists.txt') }}-
 
 
+      - name: Set Up Python
+        id: python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.14.4
+          check-latest: true
+          cache: pip
+          pip-install: |
+            jinja2
+
       - name: Set Up sccache
         uses: mozilla-actions/sccache-action@v0.0.9
         with:
