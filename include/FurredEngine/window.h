@@ -47,11 +47,11 @@ typedef struct {
  * @param settings A pointer to the settings to be applied. See @ref FE_WindowSettings.
  * @return FE_Window* 
  */
-FE_EXPORT FE_Window* furred_create_window(FE_WindowSettings* settings);
+FE_EXPORT FE_Window* furred_window_create(FE_WindowSettings* settings);
 /**
- * @brief Destroys a previously constructed window. See @ref furred_create_window.
+ * @brief Destroys a previously constructed window. See @ref furred_window_create.
  * 
  * @param window A pointer to the associated window.
  * @return void 
  */
-FE_EXPORT void furred_destroy_window(FE_Window* window);
+FE_EXPORT void furred_window_destroy(FE_Window* window);

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 int main() {
-    FE_Window* window = furred_create_window(NULL);
+    FE_Window* window = furred_window_create(NULL);
     FE_Vector* vec = furred_vector_create(0, sizeof(float));
 
     float lastTime = glfwGetTime();
@@ -34,5 +34,5 @@ int main() {
     }
 
     furred_vector_destroy(vec);
-    furred_destroy_window(window);
+    furred_window_destroy(window);
 }

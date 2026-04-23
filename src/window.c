@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-FE_Window* furred_create_window(FE_WindowSettings* settings) {
+FE_Window* furred_window_create(FE_WindowSettings* settings) {
     FE_WindowSettings* windowSettings = &(FE_WindowSettings){
         640, 480,
         "GLFW Window"
@@ -49,7 +49,7 @@ FE_Window* furred_create_window(FE_WindowSettings* settings) {
     return window;
 }
 
-void furred_destroy_window(FE_Window* window) {
+void furred_window_destroy(FE_Window* window) {
     if (!window) return;
 
     glfwDestroyWindow(window->glfw_window);

@@ -1,7 +1,7 @@
 #include <FurredEngine/window.h>
 
 int main() {
-    FE_Window* window = furred_create_window(NULL);
+    FE_Window* window = furred_window_create(NULL);
 
     while (!glfwWindowShouldClose(window->glfw_window)) {
         glfwPollEvents();
@@ -9,5 +9,5 @@ int main() {
         glfwSwapBuffers(window->glfw_window);
     }
 
-    furred_destroy_window(window);
+    furred_window_destroy(window);
 }
