@@ -2,7 +2,7 @@
 
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
-#include "exports.h"
+#include "export.h"
 
 /**
  * @brief A physical window on the desktop.

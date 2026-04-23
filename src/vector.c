@@ -1,41 +1,12 @@
 #include <FurredEngine/vector.h>
+#include <FurredEngine/math.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define _FE_VECTOR_EXISTS_ASSERT(v) \
+#define __FE_VECTOR_EXISTS_ASSERT(v) \
     assert(v && "Vector does not exist."); \
     assert(v->data && "Vector has already been destroyed.")
-
-
-#if defined(__GNUC__) || defined(__clang__)
-    #define __furred_clz(x) (x == 0 ? 32 : __builtin_clz(x))
-#elif defined(_MSC_VER)
-    #include <intrin.h>
-    int __furred_clz(unsigned int x) {
-        if (x == 0) return 32;
-
-        unsigned int idx;
-        _BitScanReverse(&idx, x);
-        return 31 - idx;
-    }
-#else
-    int __furred_clz(unsigned int x) {
-        if (x == 0) return 32;
-
-        unsigned int cnt = 0;
-        for (int i = 31; i >= 0; i--) {
-            if ((x >> i) & 1) break;
-            cnt++;
-        }
-        return cnt;
-    }
-#endif
-
-unsigned int __furred_next_pow2(unsigned int x) {
-    if (x < 2) return 2;
-    return ((unsigned int)1 << 31) >> (__furred_clz(x) - 1);
-}
 
 
 FE_Vector* furred_vector_create(FE_size_t size, FE_size_t dataSize) {
@@ -69,7 +40,7 @@ void furred_vector_destroy(FE_Vector* vector) {
 
 
 void* furred_vector_at(FE_Vector* vector, FE_size_t index) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
     assert(index < vector->size && "Vector index is out of range.");
 
     // Return data at index
@@ -77,7 +48,7 @@ void* furred_vector_at(FE_Vector* vector, FE_size_t index) {
 }
 
 void* furred_vector_front(FE_Vector* vector) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
     assert(vector->size > 0 && "Vector index is out of range.");
 
     // Return beginning of data
@@ -85,7 +56,7 @@ void* furred_vector_front(FE_Vector* vector) {
 }
 
 void* furred_vector_back(FE_Vector* vector) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
 
     // Return last element of data
     return furred_vector_at(vector, vector->size - 1);
@@ -93,7 +64,7 @@ void* furred_vector_back(FE_Vector* vector) {
 
 
 void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
     
     // Check if space actually needs to be reserved
     if (newCapacity <= vector->capacity) return;
@@ -117,7 +88,7 @@ void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
 }
 
 void furred_vector_shrink_to_fit(FE_Vector* vector) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
 
     // Check if vector already fits its capacity
     if (vector->size == vector->capacity) return;
@@ -133,7 +104,7 @@ void furred_vector_shrink_to_fit(FE_Vector* vector) {
 
 // TODO - needs to be tested to ensure this functions properly
 void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
     assert(index < vector->size && "Vector index is out of range.");
 
     // If index is at back of vector
@@ -163,7 +134,7 @@ void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data) {
 }
 
 void furred_vector_erase(FE_Vector* vector, FE_size_t index) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
     assert(index < vector->size && "Vector index is out of range.");
 
     // If index is at back of vector
@@ -195,14 +166,14 @@ void furred_vector_erase(FE_Vector* vector, FE_size_t index) {
 }
 
 void furred_vector_clear(FE_Vector* vector) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
 
     // Avoid using furred_vector_resize to prevent wasted computations
     vector->size = 0;
 }
 
 void furred_vector_push_back(FE_Vector* vector, void* data) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
 
     const FE_size_t oldSize = vector->size;
     
@@ -219,7 +190,7 @@ void furred_vector_push_back(FE_Vector* vector, void* data) {
 }
 
 void furred_vector_pop_back(FE_Vector* vector) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
     assert(vector->size != 0 && "Vector has no elements to pop.");
 
     // Avoid using furred_vector_resize to prevent wasted computations
@@ -227,7 +198,7 @@ void furred_vector_pop_back(FE_Vector* vector) {
 }
 
 void furred_vector_resize(FE_Vector* vector, FE_size_t newSize) {
-    _FE_VECTOR_EXISTS_ASSERT(vector);
+    __FE_VECTOR_EXISTS_ASSERT(vector);
     
     // If current capacity cannot handle newSize
     if (newSize > vector->capacity) {
@@ -235,7 +206,7 @@ void furred_vector_resize(FE_Vector* vector, FE_size_t newSize) {
         // This is done to ensure that the larger a vector grows the less allocations it should need
         //
         // furred_vector_reserve incurs an extra unneeded check, but code brevity is more important in this situation
-        furred_vector_reserve(vector, __furred_next_pow2(newSize));
+        furred_vector_reserve(vector, furred_math_next_pow2(newSize));
     }
     // Else, vector does not need to be reallocated
 
