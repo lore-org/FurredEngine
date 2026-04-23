@@ -68,25 +68,25 @@ jobs:
         uses: mozilla-actions/sccache-action@v0.0.9
         with:
           disable_annotations: true
-          version: 'v0.13.0'
+          version: v0.13.0
         env:
-          SCCACHE_GHA_ENABLED: 'true'
+          SCCACHE_GHA_ENABLED: true
 
       - name: Set Up CMake
         uses: jwlawson/actions-setup-cmake@v2
         with:
-          cmake-version: '4.2.3'
+          cmake-version: 4.2.3
 
       - name: Set Up Ninja
         uses: ashutoshvarma/setup-ninja@v1.1
         with:
-          version: '1.13.2'
+          version: 1.13.2
 
       - name: '[Windows/Linux/Android] - Set Up LLVM and Clang'
         if: matrix.config.id != 'macos'
         uses: KyleMayes/install-llvm-action@v2
         with:
-          version: '21.1.8'
+          version: 21.1.8
           env: true
 
   
