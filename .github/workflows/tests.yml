@@ -6,17 +6,15 @@ on:
       - **/CMakeLists.txt
       - **.c
       - **.h
-      - .github/
   pull_request:
     paths: |
       - **/CMakeLists.txt
       - **.c
       - **.h
-      - .github/
 
 
 jobs:
-  Build Tests:
+  tests_build:
     strategy:
       fail-fast: false
       matrix:
