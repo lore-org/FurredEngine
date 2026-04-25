@@ -61,7 +61,7 @@ jobs:
           python-version: 3.14.4
           check-latest: true
           cache: pip
-          pip-install: '**/requirements.txt'
+          pip-install: 'jinja2'
 
       - name: Set Up sccache
         uses: mozilla-actions/sccache-action@v0.0.9
