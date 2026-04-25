@@ -37,14 +37,14 @@ jobs:
 
     steps:
       - name: Checkout ${{ github.repository }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6.0.2
         with:
           submodules: recursive
           
 
       - name: Set Up Build Cache
         id: tests_buildcache
-        uses: actions/cache@v4
+        uses: actions/cache@v5.0.5
         with:
           path: |
             build
@@ -56,7 +56,7 @@ jobs:
 
       - name: Set Up Python
         id: python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: 3.14.4
           check-latest: true
@@ -64,7 +64,7 @@ jobs:
           pip-install: 'jinja2'
 
       - name: Set Up sccache
-        uses: mozilla-actions/sccache-action@v0.0.9
+        uses: mozilla-actions/sccache-action@v0.0.10
         with:
           disable_annotations: true
           version: v0.13.0
@@ -72,7 +72,7 @@ jobs:
           SCCACHE_GHA_ENABLED: true
 
       - name: Set Up CMake
-        uses: jwlawson/actions-setup-cmake@v2
+        uses: jwlawson/actions-setup-cmake@v2.2.0
         with:
           cmake-version: 4.2.3
 
@@ -83,7 +83,7 @@ jobs:
 
       - name: '[Windows/Linux/Android] - Set Up LLVM and Clang'
         if: matrix.config.id != 'macos'
-        uses: KyleMayes/install-llvm-action@v2
+        uses: KyleMayes/install-llvm-action@v2.0.9
         with:
           version: 21.1.8
           env: true
