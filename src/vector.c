@@ -6,7 +6,7 @@
 
 #define __FE_VECTOR_EXISTS_ASSERT(v) \
     assert(v && "Vector does not exist."); \
-    assert(v->data && "Vector has already been destroyed.")
+    assert(v->data && "Vector is not initialised.")
 
 
 FE_Vector* furred_vector_create(FE_size_t size, FE_size_t dataSize) {
@@ -32,10 +32,9 @@ void furred_vector_destroy(FE_Vector* vector) {
     if (!vector) return;
 
     free(vector->data);
-    vector->data = NULL;
 
-    vector->size = 0;
-    vector->capacity = 0;
+    free(vector);
+    vector = NULL;
 }
 
 
