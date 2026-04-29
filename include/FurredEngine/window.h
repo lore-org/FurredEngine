@@ -5,18 +5,6 @@
 #include "export.h"
 
 /**
- * @brief A physical window on the desktop.
- * 
- */
-typedef struct {
-    /**
-     * @brief A GLFW window object.
-     * 
-     */
-    GLFWwindow* glfw_window;
-} FE_Window;
-
-/**
  * @brief A representation of an OpenGL version.
  * 
  */
@@ -25,18 +13,6 @@ typedef struct {
     int minor;
 } FE_GLVersion;
 
-#define FE_GL_10 ((FE_GLVersion){1,0}) // OpenGL 1.0
-#define FE_GL_11 ((FE_GLVersion){1,1}) // OpenGL 1.1
-#define FE_GL_12 ((FE_GLVersion){1,2}) // OpenGL 1.2
-#define FE_GL_13 ((FE_GLVersion){1,3}) // OpenGL 1.3
-#define FE_GL_14 ((FE_GLVersion){1,4}) // OpenGL 1.4
-#define FE_GL_15 ((FE_GLVersion){1,5}) // OpenGL 1.5
-
-#define FE_GL_20 ((FE_GLVersion){2,0}) // OpenGL 2.0
-#define FE_GL_21 ((FE_GLVersion){2,1}) // OpenGL 2.1
-
-#define FE_GL_30 ((FE_GLVersion){3,0}) // OpenGL 3.0
-#define FE_GL_31 ((FE_GLVersion){3,1}) // OpenGL 3.1
 #define FE_GL_32 ((FE_GLVersion){3,2}) // OpenGL 3.2
 #define FE_GL_33 ((FE_GLVersion){3,3}) // OpenGL 3.3
 
@@ -51,7 +27,7 @@ typedef struct {
 /**
  * @brief The settings to apply to the window on creation.
  * 
- * Any values left 0 or NULL should default to:
+ * Any values left -1 or NULL will default to:
  * ```
  * {
  *     .width = 640,
@@ -64,7 +40,7 @@ typedef struct {
  */
 typedef struct {
     /**
-     * @brief The size of the window in screen coordinates. Usually measured in pixels, but may differ for retina displays.
+     * @brief The size of the window in screen coordinates. Measured in logical pixels.
      * 
      */
     int width, height;
@@ -80,16 +56,34 @@ typedef struct {
     FE_GLVersion* gl_version;
     /**
      * @brief How many screen updates to wait before updating the display buffer. Also known as VSync.
-     * 
+     * @warning Versions below OpenGL 3.2 may cause issues.
      */
     int swap_interval;
+    
 } FE_WindowSettings;
+
+/**
+ * @brief A physical window on the desktop.
+ * 
+ */
+typedef struct {
+    /**
+     * @brief A GLFW window object.
+     * 
+     */
+    GLFWwindow* glfw_window;
+    /**
+     * @brief The settings used to create the window.
+     * 
+     */
+    FE_WindowSettings* window_settings;
+} FE_Window;
 
 /**
  * @brief Constructs a window using the applied `settings`.
  * 
  * @param settings A pointer to the settings to be applied. See @ref FE_WindowSettings.
- * @return FE_Window* 
+ * @return FE_Window*
  */
 FE_EXPORT FE_Window* furred_window_create(FE_WindowSettings* settings);
 /**
@@ -99,3 +93,29 @@ FE_EXPORT FE_Window* furred_window_create(FE_WindowSettings* settings);
  * @return void 
  */
 FE_EXPORT void furred_window_destroy(FE_Window* window);
+
+/**
+ * @brief Handles per-frame updates, and returns whether the window should close.
+ * 
+ * ```c
+ * FE_Window* someWindow = ...;
+ * 
+ * // This loop runs until window should close (@see glfwWindowShouldClose)
+ * while (!furred_window_check_and_update(someWindow)) {
+ *     // Inside of `furred_window_check_and_update`:
+ *         // The window's back buffer is swapped to the front buffer. (@see glfwSwapBuffers)
+ *         // Then, the status of the window is checked to make sure it does not need to be closed. (@see glfwWindowShouldClose)
+ *         // Finally, events such as keypresses and mouse movements are polled. (@see glfwPollEvents)
+ * 
+ *     // Afterwards, the user-defined code is allowed to run.
+ * 
+ *     // Because the buffers are swapped at the beginning of each loop instead of the end,
+ *     // the very first frame will be displayed as a blank screen.
+ *     // If this is undesireable, you can make the required glfw calls yourself.
+ * }
+ * ```
+ * 
+ * @param window A pointer to the associated window.
+ * @return int Whether the current window should close. @see glfwWindowShouldClose.
+ */
+FE_EXPORT int furred_window_check_and_update(FE_Window* window);

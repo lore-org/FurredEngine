@@ -8,10 +8,13 @@ int main() {
         0 // Disables VSync
     });
 
-    while (!glfwWindowShouldClose(window->glfw_window)) {
-        glfwPollEvents();
-        
-        glfwSwapBuffers(window->glfw_window);
+    while (!furred_window_check_and_update(window)) {
+        // VSync buffer is swapped as soon as loop starts
+
+        // If window is open, updates needed for frame are already polled
+        // Otherwise the loop will exit early because furred_window_check_and_update returns 0
+
+        // User runs code for this frame :3
     }
 
     furred_window_destroy(window);
