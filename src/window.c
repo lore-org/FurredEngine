@@ -1,4 +1,3 @@
-#include "GLFW/glfw3.h"
 #include <FurredEngine/window.h>
 #include <assert.h>
 #include <stdlib.h>
