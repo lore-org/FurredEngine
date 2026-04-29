@@ -2,16 +2,18 @@ name: Tests
 
 on:
   workflow_dispatch:
+
   push:
     paths: |
-      - **/CMakeLists.txt
-      - **.c
-      - **.h
+      **/CMakeLists.txt
+      **.c
+      **.h
+
   pull_request:
     paths: |
-      - **/CMakeLists.txt
-      - **.c
-      - **.h
+      **/CMakeLists.txt
+      **.c
+      **.h
 
 
 jobs:
