@@ -15,7 +15,7 @@ FE_Vector* furred_vector_create(FE_size_t size, FE_size_t dataSize) {
     void* data = calloc(capacity, dataSize);
     assert(data && "Vector could not be created. Does the system have enough memory?");
 
-    FE_Vector* vector = malloc(sizeof(FE_Vector));
+    FE_Vector* vector = (FE_Vector*)malloc(sizeof(FE_Vector));
     assert(vector && "Vector could not be created. Does the system have enough memory?");
     
     *vector = (FE_Vector) {
@@ -43,7 +43,7 @@ void* furred_vector_at(FE_Vector* vector, FE_size_t index) {
     assert(index < vector->size && "Vector index is out of range.");
 
     // Return data at index
-    return vector->data + (index * vector->data_size);
+    return (char*)vector->data + (index * vector->data_size);
 }
 
 void* furred_vector_front(FE_Vector* vector) {
@@ -76,7 +76,7 @@ void furred_vector_reserve(FE_Vector* vector, FE_size_t newCapacity) {
     
     // Initialise newly allocated portion to 0
     memset(
-        newData + (oldCapacity * vector->data_size),
+        (char*)newData + (oldCapacity * vector->data_size),
         0,
         (newCapacity - oldCapacity) * vector->data_size
     );
@@ -119,13 +119,13 @@ void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data) {
     furred_vector_resize(vector, vector->size + 1);
 
     // Pointer to index in vector data
-    void* dataPtr = vector->data + (index * vector->data_size);
+    void* dataPtr = (char*)vector->data + (index * vector->data_size);
     // Length from start of index to end of vector
     const FE_size_t dataLength = oldSize - (index - 1);
 
     // Move data after index forward by 1
     memmove(
-        dataPtr + vector->data_size, dataPtr,
+        (char*)dataPtr + vector->data_size, dataPtr,
         dataLength * vector->data_size
     );
     // Copy data to index
@@ -153,13 +153,13 @@ void furred_vector_erase(FE_Vector* vector, FE_size_t index) {
     vector->size--;
 
     // Pointer to index in vector data
-    void* dataPtr = vector->data + (index * vector->data_size);
+    void* dataPtr = (char*)vector->data + (index * vector->data_size);
     // Length from start of next index to end of vector
     const FE_size_t dataLength = oldSize - index;
 
     // Move data after index backward by 1
     memmove(
-        dataPtr, dataPtr + vector->data_size,
+        dataPtr, (char*)dataPtr + vector->data_size,
         dataLength * vector->data_size
     );
 }
@@ -182,7 +182,7 @@ void furred_vector_push_back(FE_Vector* vector, void* data) {
     // Pointer to last element in vector data
     //
     // Avoid using furred_vector_back to prevent wasted computations
-    void* dataPtr = vector->data + (oldSize * vector->data_size);
+    void* dataPtr = (char*)vector->data + (oldSize * vector->data_size);
 
     // Copy data to last element
     memcpy(dataPtr, data, vector->data_size);

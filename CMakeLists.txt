@@ -30,6 +30,42 @@ target_include_directories(FurredEngine PUBLIC
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+target_compile_options(FurredEngine PRIVATE
+# Ensure base code integrity.
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Werror=deprecated
+    -Wunreachable-code-aggressive
+
+# Prevent general unintended behaviour.
+    -Wcast-align
+    -Wpadded
+    -Wshadow
+    -Wnull-dereference
+    -Wimplicit-fallthrough
+    -Wpointer-arith
+    -Wfloat-equal
+
+# Prevent unintended behaviour involving casting of numeric types.
+    -Wconversion
+    -Wsign-conversion
+    -Wfloat-conversion
+    -Wimplicit-int-float-conversion
+    -Wdouble-promotion
+
+# Ensure cross-compiler compatibility.
+    -Werror=format=2
+    -Werror=pragmas
+    -Werror=missing-declarations
+
+# Ensure compatibility with C++.
+    -Werror=c++-compat
+    -Werror=vla
+    -Werror=strict-prototypes
+    -Werror=missing-prototypes
+)
+
 # Configure submodules
 
 include(glad)

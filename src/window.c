@@ -17,7 +17,7 @@ static FE_WindowSettings defaultWindowSettings = {
 
 
 FE_Window* furred_window_create(FE_WindowSettings* settings) {
-    FE_WindowSettings* windowSettings = malloc(sizeof(FE_WindowSettings));
+    FE_WindowSettings* windowSettings = (FE_WindowSettings*)malloc(sizeof(FE_WindowSettings));
     assert(windowSettings && "Could not create window. Does the system have enough memory?");
 
     if (settings) {
@@ -34,7 +34,7 @@ FE_Window* furred_window_create(FE_WindowSettings* settings) {
         __FE_CheckValueAndCopySetting(swap_interval);
     }
 
-    FE_Window* window = malloc(sizeof(FE_Window));
+    FE_Window* window = (FE_Window*)malloc(sizeof(FE_Window));
     assert(window && "Could not create window. Does the system have enough memory?");
 
     // Initialise GLFW
@@ -93,7 +93,7 @@ void furred_window_destroy(FE_Window* window) {
 }
 
 // Wrapper around glfwSwapBuffers
-void __furred_window_swap_buffers(FE_Window* window) {
+static void __furred_window_swap_buffers(FE_Window* window) {
     // TODO - run frame updates after user-defined logic is run
     __FE_WINDOW_EXISTS_ASSERT(window);
 
@@ -102,7 +102,7 @@ void __furred_window_swap_buffers(FE_Window* window) {
 }
 
 // Wrapper around glfwPollEvents
-void __furred_window_poll_events(FE_Window* window) {
+static void __furred_window_poll_events(FE_Window* window) {
     // TODO - run frame updates before user-defined logic is run
     __FE_WINDOW_EXISTS_ASSERT(window);
 
