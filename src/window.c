@@ -20,19 +20,18 @@ FE_Window* furred_window_create(FE_WindowSettings* settings) {
     FE_WindowSettings* windowSettings = (FE_WindowSettings*)malloc(sizeof(FE_WindowSettings));
     assert(windowSettings && "Could not create window. Does the system have enough memory?");
 
-    if (settings) {
-        #define __FE_CopySetting(setting) windowSettings->setting = settings->setting
-        #define __FE_CopyDefault(setting) windowSettings->setting = defaultWindowSettings.setting
 
-        #define __FE_CheckConditionAndCopySetting(condition, setting) do { if (condition) (__FE_CopySetting(setting)); else (__FE_CopyDefault(setting)); } while (0)
-        #define __FE_CheckValueAndCopySetting(setting) __FE_CheckConditionAndCopySetting(settings->setting >= 0, setting)
-        
-        __FE_CheckValueAndCopySetting(width);
-        __FE_CheckValueAndCopySetting(height);
-        __FE_CheckConditionAndCopySetting((settings->title && strlen(settings->title) > 0), title);
-        __FE_CheckConditionAndCopySetting((settings->gl_version), gl_version);
-        __FE_CheckValueAndCopySetting(swap_interval);
-    }
+    #define __FE_CopySetting(setting) windowSettings->setting = settings->setting
+    #define __FE_CopyDefault(setting) windowSettings->setting = defaultWindowSettings.setting
+    #define __FE_CheckConditionAndCopySetting(condition, setting) if (settings && condition) (__FE_CopySetting(setting)); else (__FE_CopyDefault(setting))
+    #define __FE_CheckValueAndCopySetting(setting) __FE_CheckConditionAndCopySetting(settings->setting > 0, setting)
+    
+    __FE_CheckValueAndCopySetting(width);
+    __FE_CheckValueAndCopySetting(height);
+    __FE_CheckConditionAndCopySetting(settings->title && strlen(settings->title) > 0, title);
+    __FE_CheckConditionAndCopySetting(settings->gl_version, gl_version);
+    __FE_CheckValueAndCopySetting(swap_interval);
+
 
     FE_Window* window = (FE_Window*)malloc(sizeof(FE_Window));
     assert(window && "Could not create window. Does the system have enough memory?");
