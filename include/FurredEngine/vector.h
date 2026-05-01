@@ -1,8 +1,7 @@
 #pragma once
 
 #include "export.h"
-
-typedef unsigned int FE_size_t;
+#include "math.h"
 
 /**
  * @brief An automatically resizing array.
