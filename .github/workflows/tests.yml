@@ -8,17 +8,14 @@ on:
       - '**/CMakeLists.txt'
       - '**.c'
       - '**.h'
-      - '.github/workflows'
+      - '.github/workflows/**'
 
   pull_request:
     paths:
       - '**/CMakeLists.txt'
       - '**.c'
       - '**.h'
-      - '.github/workflows'
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      - '.github/workflows/**'
 
 jobs:
   tests_build:
