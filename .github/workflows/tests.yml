@@ -44,6 +44,12 @@ jobs:
           submodules: recursive
           
 
+      - name: '[Linux] Install packages'
+        uses: awalsh128/cache-apt-pkgs-action@v1.6.0
+        with:
+          packages: libwayland-dev libxkbcommon-dev xorg-dev
+          version: 1
+
       - name: Set Up Build Cache
         id: tests_buildcache
         uses: actions/cache@v5.0.5
@@ -55,12 +61,6 @@ jobs:
           restore-keys: |
             tests_buildcache-id_${{ matrix.config.id }}-cmakelists_${{ hashFiles('**/CMakeLists.txt') }}-
 
-
-      - name: '[Linux] Install packages'
-        uses: awalsh128/cache-apt-pkgs-action@v1.6.0
-        with:
-          packages: libwayland-dev libxkbcommon-dev xorg-dev
-          version: 1
       
       - name: Set Up Python
         id: python
