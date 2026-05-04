@@ -56,6 +56,12 @@ jobs:
             tests_buildcache-id_${{ matrix.config.id }}-cmakelists_${{ hashFiles('**/CMakeLists.txt') }}-
 
 
+      - name: '[Linux] Install packages'
+        uses: awalsh128/cache-apt-pkgs-action@v1.6.0
+        with:
+          packages: libwayland-dev libxkbcommon-dev xorg-dev
+          version: 1
+      
       - name: Set Up Python
         id: python
         uses: actions/setup-python@v6.2.0
