@@ -21,10 +21,12 @@ FE_Window* furred_window_create(FE_WindowSettings* settings) {
     assert(windowSettings && "Could not create window. Does the system have enough memory?");
 
 
-    #define __FE_CopySetting(setting) windowSettings->setting = settings->setting
-    #define __FE_CopyDefault(setting) windowSettings->setting = defaultWindowSettings.setting
-    #define __FE_CheckConditionAndCopySetting(condition, setting) if (settings && condition) (__FE_CopySetting(setting)); else (__FE_CopyDefault(setting))
-    #define __FE_CheckValueAndCopySetting(setting) __FE_CheckConditionAndCopySetting(settings->setting > 0, setting)
+    #define __FE_CheckConditionAndCopySetting(condition, setting) \
+        if (settings && condition) windowSettings->setting = settings->setting; \
+        else windowSettings->setting = defaultWindowSettings.setting
+        
+    #define __FE_CheckValueAndCopySetting(setting) \
+        __FE_CheckConditionAndCopySetting(settings->setting > 0, setting)
     
     __FE_CheckValueAndCopySetting(width);
     __FE_CheckValueAndCopySetting(height);
