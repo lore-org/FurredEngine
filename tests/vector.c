@@ -8,14 +8,13 @@ int main() {
     FE_Vector* vec = furred_vector_create(0, sizeof(float));
 
     float lastTime = glfwGetTime();
-    while (!glfwWindowShouldClose(window->glfw_window)) {
+    while (!furred_window_check_and_update(window)) {
         float nowTime = glfwGetTime();
-        glfwPollEvents();
 
         float elapsed = nowTime - lastTime;
 
         furred_vector_push_back(vec, &elapsed);
-        while (vec->size > 60) {
+        while (vec->size > 10) {
             furred_vector_erase(vec, 0);
         }
 
@@ -30,7 +29,6 @@ int main() {
         glfwSetWindowTitle(window->glfw_window, title);
         
         lastTime = nowTime;
-        glfwSwapBuffers(window->glfw_window);
     }
 
     furred_vector_destroy(vec);

@@ -59,7 +59,6 @@ typedef struct {
      * @warning Versions below OpenGL 3.2 may cause issues.
      */
     int swap_interval;
-    
 } FE_WindowSettings;
 
 /**
@@ -111,7 +110,6 @@ FE_EXPORT void furred_window_destroy(FE_Window* window);
  * 
  *     // Because the buffers are swapped at the beginning of each loop instead of the end,
  *     // the very first frame will be displayed as a blank screen.
- *     // If this is undesireable, you can make the required glfw calls yourself.
  * }
  * ```
  * 

@@ -101,7 +101,6 @@ void furred_vector_shrink_to_fit(FE_Vector* vector) {
     vector->capacity = vector->size;
 }
 
-// TODO - needs to be tested to ensure this functions properly
 void furred_vector_insert(FE_Vector* vector, FE_size_t index, void* data) {
     __FE_VECTOR_EXISTS_ASSERT(vector);
     assert(index < vector->size && "Vector index is out of range.");
