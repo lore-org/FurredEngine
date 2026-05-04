@@ -45,6 +45,7 @@ jobs:
           
 
       - name: '[Linux] Install packages'
+        if: matrix.config.id == 'linux'
         uses: awalsh128/cache-apt-pkgs-action@v1.6.0
         with:
           packages: libwayland-dev libxkbcommon-dev xorg-dev
