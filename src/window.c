@@ -7,7 +7,7 @@
     assert(w && "Window does not exist."); \
     assert(w->glfw_window && w->window_settings && "Window is not initialised.")
 
-static FE_WindowSettings defaultWindowSettings = {
+static const FE_WindowSettings defaultWindowSettings = {
     .width = 640,
     .height = 480,
     .title = "GLFW Window",
